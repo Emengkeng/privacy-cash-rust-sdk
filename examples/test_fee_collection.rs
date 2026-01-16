@@ -3,9 +3,13 @@
 //! This will:
 //! 1. Deposit 0.02 SOL
 //! 2. Withdraw it back (collecting 1% Nova Shield fee)
+//!
+//! Usage:
+//!   SOLANA_PRIVATE_KEY="your_key" cargo run --example test_fee_collection
 
 use privacy_cash::{PrivacyCash, Signer};
 use solana_sdk::signature::Keypair;
+use std::env;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -15,20 +19,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("       NOVA SHIELD - FEE COLLECTION TEST");
     println!("═══════════════════════════════════════════════════════════════\n");
 
-    // Parse private key
-    let private_key = "2Rub9j5xV9YjzPFC7yxqfwyra5hnv3NCcRgYNcGosNp6qeJX3Fb2ppnRSwYmfFbVX9NMSh5qGvppA7qVWMmMLWMj";
-    let key_bytes = bs58::decode(private_key).into_vec()?;
+    // Parse private key from environment
+    let private_key = env::var("SOLANA_PRIVATE_KEY").expect(
+        "SOLANA_PRIVATE_KEY environment variable not set.\n\
+         Usage: SOLANA_PRIVATE_KEY=\"your_key\" cargo run --example test_fee_collection"
+    );
+    let key_bytes = bs58::decode(&private_key).into_vec()?;
     let keypair = Keypair::from_bytes(&key_bytes)?;
 
     println!("Wallet: {}", keypair.pubkey());
     println!("Nova Shield Fee Wallet: HKBrbp3h8B9tMCn4ceKCtmF8jWxvpfrb7YNLbCgxLUJL");
 
-    let rpc_url = "https://api.mainnet-beta.solana.com";
+    let rpc_url = env::var("SOLANA_RPC_URL")
+        .unwrap_or_else(|_| "https://api.mainnet-beta.solana.com".to_string());
     println!("RPC: {}\n", rpc_url);
 
     // Create client
     let client = PrivacyCash::with_options(
-        rpc_url,
+        &rpc_url,
         keypair,
         None,
         Some("./circuit/transaction2".to_string()),

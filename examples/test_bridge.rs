@@ -1,8 +1,12 @@
 //! Test: TypeScript Bridge for ZK operations
 //!
 //! This tests the TypeScript bridge which handles ZK proof generation.
+//!
+//! Usage:
+//!   SOLANA_PRIVATE_KEY="your_key" cargo run --example test_bridge
 
 use privacy_cash::bridge;
+use std::env;
 
 fn main() {
     env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
@@ -11,12 +15,16 @@ fn main() {
     println!("       NOVA SHIELD - TYPESCRIPT BRIDGE TEST");
     println!("═══════════════════════════════════════════════════════════════\n");
 
-    let private_key = "2Rub9j5xV9YjzPFC7yxqfwyra5hnv3NCcRgYNcGosNp6qeJX3Fb2ppnRSwYmfFbVX9NMSh5qGvppA7qVWMmMLWMj";
-    let rpc_url = "https://api.mainnet-beta.solana.com";
+    let private_key = env::var("SOLANA_PRIVATE_KEY").expect(
+        "SOLANA_PRIVATE_KEY environment variable not set.\n\
+         Usage: SOLANA_PRIVATE_KEY=\"your_key\" cargo run --example test_bridge"
+    );
+    let rpc_url = env::var("SOLANA_RPC_URL")
+        .unwrap_or_else(|_| "https://api.mainnet-beta.solana.com".to_string());
 
     println!("Testing balance check via TypeScript bridge...\n");
 
-    match bridge::ts_get_balance(rpc_url, private_key) {
+    match bridge::ts_get_balance(&rpc_url, &private_key) {
         Ok(balance) => {
             println!("✅ Bridge works!");
             println!("   Private SOL: {} lamports ({} SOL)", balance.lamports, balance.sol);
@@ -29,7 +37,7 @@ fn main() {
     // Test USDC balance
     println!("\nTesting USDC balance...");
     let usdc_mint = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
-    match bridge::ts_get_balance_spl(rpc_url, private_key, usdc_mint) {
+    match bridge::ts_get_balance_spl(&rpc_url, &private_key, usdc_mint) {
         Ok(balance) => {
             println!("✅ USDC Balance: {} base units ({} USDC)", balance.base_units, balance.amount);
         }
@@ -41,7 +49,7 @@ fn main() {
     // Test USDT balance
     println!("\nTesting USDT balance...");
     let usdt_mint = "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB";
-    match bridge::ts_get_balance_spl(rpc_url, private_key, usdt_mint) {
+    match bridge::ts_get_balance_spl(&rpc_url, &private_key, usdt_mint) {
         Ok(balance) => {
             println!("✅ USDT Balance: {} base units ({} USDT)", balance.base_units, balance.amount);
         }
