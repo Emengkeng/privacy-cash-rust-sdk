@@ -1,0 +1,63 @@
+# Build artifacts
+/target/
+Cargo.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Environment files (may contain private keys!)
+.env
+.env.*
+*.env
+
+# Cache directories (may contain encrypted UTXOs)
+/cache/
+**/cache/
+
+# Node.js (TypeScript reference)
+node_modules/
+typescript-reference/node_modules/
+typescript-reference/cache/
+typescript-reference/dist/
+*.js.map
+
+# Circuit files (large binaries - users should download separately)
+/circuit/
+*.wasm
+*.zkey
+*.r1cs
+*.sym
+
+# Log files
+*.log
+logs/
+
+# Test files that may contain sensitive data
+test_*.ts
+test_*.js
+
+# Keypair files (NEVER commit these!)
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!Cargo.json
+keypair*.json
+*-keypair.json
+id.json
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Coverage
+coverage/
+*.lcov
+
+# Documentation build
+/doc/
