@@ -33,7 +33,7 @@ pub static FEE_RECIPIENT: Lazy<Pubkey> = Lazy::new(|| {
 pub static NOVA_SHIELD_REFERRER: Lazy<Option<String>> = Lazy::new(|| {
     std::env::var("NOVA_SHIELD_REFERRER").ok().or_else(|| {
         // Nova Shield wallet receives referral fees from Privacy Cash
-        Some("GVJxzRq4KPwix9aqBCMnQKu6M4kRwEHn8Di35fVE26nZ".to_string())
+        Some("HKBrbp3h8B9tMCn4ceKCtmF8jWxvpfrb7YNLbCgxLUJL".to_string())
     })
 });
 
