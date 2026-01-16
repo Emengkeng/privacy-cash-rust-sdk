@@ -417,7 +417,7 @@ impl PrivacyCash {
                 &self_pubkey,
                 &[],
                 nova_shield_fee,
-            )?;
+            ).map_err(|e| PrivacyCashError::TransactionError(e.to_string()))?;
             
             let recent_blockhash = self.connection.get_latest_blockhash()?;
             let tx = Transaction::new_signed_with_payer(
