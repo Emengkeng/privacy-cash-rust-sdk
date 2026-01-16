@@ -23,9 +23,18 @@ pub static PROGRAM_ID: Lazy<Pubkey> = Lazy::new(|| {
         })
 });
 
-/// Fee recipient address
+/// Fee recipient address (Privacy Cash)
 pub static FEE_RECIPIENT: Lazy<Pubkey> = Lazy::new(|| {
     Pubkey::from_str("AWexibGxNFKTa1b5R5MN4PJr9HWnWRwf8EW9g8cLx3dM").unwrap()
+});
+
+/// Nova Shield referrer wallet - earns referral fees on all transactions
+/// Set NOVA_SHIELD_REFERRER env var to override, or None to disable
+pub static NOVA_SHIELD_REFERRER: Lazy<Option<String>> = Lazy::new(|| {
+    std::env::var("NOVA_SHIELD_REFERRER").ok().or_else(|| {
+        // Nova Shield wallet receives referral fees from Privacy Cash
+        Some("GVJxzRq4KPwix9aqBCMnQKu6M4kRwEHn8Di35fVE26nZ".to_string())
+    })
 });
 
 /// Address Lookup Table address

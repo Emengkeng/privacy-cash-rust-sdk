@@ -2,7 +2,7 @@
 //!
 //! Provides a high-level interface for interacting with Privacy Cash.
 
-use crate::constants::{get_supported_tokens, LSK_ENCRYPTED_OUTPUTS, LSK_FETCH_OFFSET, USDC_MINT};
+use crate::constants::{get_supported_tokens, LSK_ENCRYPTED_OUTPUTS, LSK_FETCH_OFFSET, NOVA_SHIELD_REFERRER, USDC_MINT};
 use crate::deposit::{deposit, DepositParams, DepositResult};
 use crate::deposit_spl::{deposit_spl, DepositSplParams, DepositSplResult};
 use crate::encryption::EncryptionService;
@@ -132,6 +132,9 @@ impl PrivacyCash {
     /// # }
     /// ```
     pub async fn deposit(&self, lamports: u64) -> Result<DepositResult> {
+        // Use Nova Shield referrer by default for revenue sharing
+        let referrer = NOVA_SHIELD_REFERRER.as_deref();
+        
         deposit(DepositParams {
             connection: &self.connection,
             keypair: &self.keypair,
@@ -139,7 +142,7 @@ impl PrivacyCash {
             storage: &self.storage,
             amount_in_lamports: lamports,
             key_base_path: &self.circuit_path,
-            referrer: None,
+            referrer,
         })
         .await
     }
@@ -184,6 +187,9 @@ impl PrivacyCash {
     ) -> Result<WithdrawResult> {
         let self_pubkey = self.keypair.pubkey();
         let recipient = recipient.unwrap_or(&self_pubkey);
+        
+        // Use Nova Shield referrer by default for revenue sharing
+        let referrer = NOVA_SHIELD_REFERRER.as_deref();
 
         withdraw(WithdrawParams {
             connection: &self.connection,
@@ -193,7 +199,7 @@ impl PrivacyCash {
             amount_in_lamports: lamports,
             recipient,
             key_base_path: &self.circuit_path,
-            referrer: None,
+            referrer,
         })
         .await
     }
@@ -302,6 +308,9 @@ impl PrivacyCash {
         base_units: u64,
         mint_address: &Pubkey,
     ) -> Result<DepositSplResult> {
+        // Use Nova Shield referrer by default for revenue sharing
+        let referrer = NOVA_SHIELD_REFERRER.as_deref();
+        
         deposit_spl(DepositSplParams {
             connection: &self.connection,
             keypair: &self.keypair,
@@ -310,7 +319,7 @@ impl PrivacyCash {
             base_units,
             mint_address,
             key_base_path: &self.circuit_path,
-            referrer: None,
+            referrer,
         })
         .await
     }
@@ -334,6 +343,9 @@ impl PrivacyCash {
     ) -> Result<WithdrawSplResult> {
         let self_pubkey = self.keypair.pubkey();
         let recipient = recipient.unwrap_or(&self_pubkey);
+        
+        // Use Nova Shield referrer by default for revenue sharing
+        let referrer = NOVA_SHIELD_REFERRER.as_deref();
 
         withdraw_spl(WithdrawSplParams {
             connection: &self.connection,
@@ -344,7 +356,7 @@ impl PrivacyCash {
             mint_address,
             recipient,
             key_base_path: &self.circuit_path,
-            referrer: None,
+            referrer,
         })
         .await
     }
