@@ -106,7 +106,7 @@ version = "0.2"
 default-features = false
 
 [dependencies.thiserror]
-version = "^1.0.39"
+version = "1.0"
 
 [dependencies.wasmer]
 version = "^2.3.0"
@@ -131,7 +131,6 @@ circom-2 = []
 default = [
     "wasmer/default",
     "circom-2",
-    "ethereum",
 ]
 ethereum = ["ethers-core"]
 wasm = ["wasmer/js-default"]
